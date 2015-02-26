@@ -6,7 +6,7 @@ Tested on GNU/Linux, unlikely to work on other platforms. Use cautiously and bac
 
 ## Example usage
 
-**TL;DR:** Python regexp replace (```re.subn```). Single quotes are your best friend.
+**TL;DR:** Python regexp replace (```re.sub```). Single quotes are your best friend.
 
 The program asks you before doing anything (by default), so feel free to experiment.
 
@@ -28,12 +28,12 @@ Bellini_-_Mr._Samba_old_SB_50_(mp3.pm).mp3
 
 Let's make it so your eyes do not bleed by looking at the names.
 
-1. Replace underscores with braces:
+1. Replace underscores with spaces:
 ```bash
 rn _ ' '
 ```
 
-2. Drop the ads in braces:
+2. Drop the ads in brackets:
 ```bash
 rn ' \(.*\)' ''
 ```
