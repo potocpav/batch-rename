@@ -1,0 +1,95 @@
+#!/usr/bin/python3
+
+# This is free and unencumbered software released into the public domain.
+
+import argparse
+import subprocess
+import re
+import shutil
+import sys
+
+parser = argparse.ArgumentParser(description='Batch rename files.')
+
+parser.add_argument('-v', '--verbose', dest='verbose', action='store_const',
+                   const=True, default=False,
+                   help='write information about every moved file')
+parser.add_argument('-q', '--quiet', dest='quiet', action='store_const',
+                   const=True, default=False,
+                   help='do not output anything')
+parser.add_argument('-p', '--pretend', dest='pretend', action='store_const',
+                   const=True, default=False,
+                   help='just list the mv commands, do not write anything')
+parser.add_argument('-b', '--batch', dest='batch', action='store_const',
+                   const=True, default=False,
+                   help='do not ask before renaming')
+
+parser.add_argument('files', metavar='file', type=str, nargs='*',
+                   help='list of files to rename')
+parser.add_argument('match', metavar='match', type=str,
+                   help='regexp match')
+parser.add_argument('replace', metavar='replace', type=str,
+                   help='regexp replace')
+
+args = parser.parse_args()
+
+def err(*s):
+	if not args.quiet: print(*s, file=sys.stderr)
+def verbose(*s):
+	if args.verbose: print(*s)
+def info(*s):
+	if not args.quiet: print(*s)
+
+def ask(question):
+	yes = set(['yes','ye','y',''])
+	no = set(['no','n'])
+
+	while True:
+		print(question, end=" [Y/n]")
+		choice = input().lower()
+		if choice in yes:
+		   return True
+		elif choice in no:
+		   return False
+
+
+# rename '*' by default
+if not args.files:
+	args.files = subprocess.check_output("ls", shell=True).decode("utf-8").split('\n')
+
+found_c = len(args.files)
+matched_c = 0
+renamed_c = 0
+errors_c = 0
+
+repl = []
+for f in args.files:
+	(f2,n) = re.subn(args.match, args.replace, f)
+	if (n):
+		matched_c += 1
+	if f != f2:
+		repl.append((f,f2))
+
+if not len(repl):
+	info("No replacements made.")
+	exit(0)
+
+width = max([len(s[0]) for s in repl])
+for (f,f2) in repl:
+	if args.pretend or not args.batch:
+		info(repr(f),(width-len(f))*' ' + '->',repr(f2))
+	else:
+		verbose(repr(f),'->',repr(f2))
+
+
+if not args.pretend and args.batch or ask("Proceed by moving the files?"):
+	for (f,f2) in repl:
+		try:
+			shutil.move(f,f2)
+			renamed_c += 1
+		except:
+			err("Error moving the file:", repr(f),'->',repr(f2))
+			errors_c += 1
+
+	info('== found: {}, matched: {}, renamed: {}, errors: {}. =='.format(found_c, matched_c, renamed_c, errors_c))
+
+exit(0)
