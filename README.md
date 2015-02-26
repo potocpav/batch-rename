@@ -2,7 +2,7 @@
 # batch-rename
 
 A simple Python script to **batch rename/move** files using **regular expressions.**
-Tested on Linux, unlikely to work on other platforms. Use cautiously and backup your files if necessary. It is easy to do bad stuff with simple typos.
+Tested on GNU/Linux, unlikely to work on other platforms. Use cautiously and backup your files if necessary. It is easy to do bad stuff with simple typos.
 
 ## Example usage
 
