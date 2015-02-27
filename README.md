@@ -4,6 +4,27 @@
 A simple Python script to **batch rename/move** files using **regular expressions.**
 Tested on GNU/Linux, unlikely to work on other platforms. Use cautiously and backup your files if necessary. It is easy to do bad stuff with simple typos.
 
+# Invocation
+
+This is the output of the ```rn --help``` command.
+```
+usage: rn [-h] [-v] [-q] [-p] [-b] [file [file ...]] match replace
+
+Batch rename files.
+
+positional arguments:
+  file           list of files to rename
+  match          regexp match
+  replace        regexp replace
+
+optional arguments:
+  -h, --help     show this help message and exit
+  -v, --verbose  write information about every moved file
+  -q, --quiet    do not output anything
+  -p, --pretend  just list the mv commands, do not write anything
+  -b, --batch    do not ask before renaming
+```
+
 ## Example usage
 
 **TL;DR:** Python regexp replace (```re.sub```). Single quotes are your best friend.
