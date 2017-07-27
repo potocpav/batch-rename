@@ -22,6 +22,9 @@ parser.add_argument('-p', '--pretend', dest='pretend', action='store_const',
 parser.add_argument('-b', '--batch', dest='batch', action='store_const',
                    const=True, default=False,
                    help='do not ask before renaming')
+parser.add_argument('-c', '--copy', dest='copy', action='store_const',
+                   const=True, default=False,
+                   help='copy the files instead of just moving')
 
 parser.add_argument('files', metavar='file', type=str, nargs='*',
                    help='list of files to rename')
@@ -81,13 +84,16 @@ for (f,f2) in repl:
 		verbose(repr(f),'->',repr(f2))
 
 
-if not args.pretend and args.batch or ask("Proceed by moving the files?"):
+if not args.pretend and args.batch or ask("Proceed by copying the files?" if args.copy else "Proceed by moving the files?"):
 	for (f,f2) in repl:
 		try:
-			shutil.move(f,f2)
+			if args.copy:
+				shutil.copy(f,f2)
+			else:
+				shutil.move(f,f2)
 			renamed_c += 1
 		except:
-			err("Error moving the file:", repr(f),'->',repr(f2))
+			err("Error copying the file:" if args.copy else "Error moving the file:", repr(f),'->',repr(f2))
 			errors_c += 1
 
 	info('== found: {}, matched: {}, renamed: {}, errors: {}. =='.format(found_c, matched_c, renamed_c, errors_c))

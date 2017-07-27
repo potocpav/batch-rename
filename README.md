@@ -23,6 +23,7 @@ optional arguments:
   -q, --quiet    do not output anything
   -p, --pretend  just list the mv commands, do not write anything
   -b, --batch    do not ask before renaming
+  -c, --copy     copy the files instead of just moving
 ```
 
 ## Example usage
