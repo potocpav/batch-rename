@@ -26,12 +26,12 @@ parser.add_argument('-c', '--copy', dest='copy', action='store_const',
                    const=True, default=False,
                    help='copy the files instead of just moving')
 
-parser.add_argument('files', metavar='file', type=str, nargs='*',
-                   help='list of files to rename')
 parser.add_argument('match', metavar='match', type=str,
                    help='regexp match')
 parser.add_argument('replace', metavar='replace', type=str,
                    help='regexp replace')
+parser.add_argument('files', metavar='file', type=str, nargs='*',
+                   help='list of files to rename')
 
 args = parser.parse_args()
 
